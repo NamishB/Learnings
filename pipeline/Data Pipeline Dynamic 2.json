@@ -1,0 +1,304 @@
+{
+	"name": "Data Pipeline Dynamic 2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy Film Data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "FilmIdLastInserted",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "MaxOnPremFilmID",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "select * \nfrom Film\nwhere FilmID >@{activity('FilmIdLastInserted').output.firstRow.LastInsertedId}\nand FilmId <= @{activity('MaxOnPremFilmID').output.firstRow.MaxId}",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "FilmID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "FilmID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Title",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Title",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ReleaseDate",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "ReleaseDate",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "DirectorID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DirectorID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "StudioID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "StudioID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Review",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Review",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CountryID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CountryID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "LanguageID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "LanguageID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "GenreID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "GenreID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "RunTimeMinutes",
+									"type": "Int16"
+								},
+								"sink": {
+									"name": "RunTimeMinutes",
+									"type": "Int16"
+								}
+							},
+							{
+								"source": {
+									"name": "CertificateID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CertificateID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "BudgetDollars",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "BudgetDollars",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "BoxOfficeDollars",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "BoxOfficeDollars",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "OscarNominations",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "OscarNominations",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "OscarWins",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "OscarWins",
+									"type": "Byte"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "OnPremDataset",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "OnCloudDataset",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "FilmIdLastInserted",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT *\n  FROM [IncrementalWaterMark] WHERE TableName='Film'",
+						"queryTimeout": "02:00:00"
+					},
+					"dataset": {
+						"referenceName": "IncrementalWaterMark",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "MaxOnPremFilmID",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT max([FilmID]) as MaxId\n  FROM [Movies].[dbo].[Film]",
+						"queryTimeout": "02:00:00"
+					},
+					"dataset": {
+						"referenceName": "OnPremDataset",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "UpdateWaterMark Table",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy Film Data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[spUpdateIncrementalWatermark]",
+					"storedProcedureParameters": {
+						"id": {
+							"value": {
+								"value": "@{activity('MaxOnPremFilmID').output.firstRow.MaxId}",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"tableName": {
+							"value": "Film",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "OnCloudSQLServerLS",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

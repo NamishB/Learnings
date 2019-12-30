@@ -1,0 +1,27 @@
+{
+	"name": "IncrementalWaterMark",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "OnCloudSQLServerLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "TableName",
+				"type": "varchar"
+			},
+			{
+				"name": "LastInsertedID",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Film"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
