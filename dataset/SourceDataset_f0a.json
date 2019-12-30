@@ -1,0 +1,77 @@
+{
+	"name": "SourceDataset_f0a",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "OnCloudSQLServerLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "FilmID",
+				"type": "int"
+			},
+			{
+				"name": "Title",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ReleaseDate",
+				"type": "datetime"
+			},
+			{
+				"name": "DirectorID",
+				"type": "int"
+			},
+			{
+				"name": "StudioID",
+				"type": "int"
+			},
+			{
+				"name": "Review",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CountryID",
+				"type": "int"
+			},
+			{
+				"name": "LanguageID",
+				"type": "int"
+			},
+			{
+				"name": "GenreID",
+				"type": "int"
+			},
+			{
+				"name": "RunTimeMinutes",
+				"type": "smallint"
+			},
+			{
+				"name": "CertificateID",
+				"type": "int"
+			},
+			{
+				"name": "BudgetDollars",
+				"type": "bigint"
+			},
+			{
+				"name": "BoxOfficeDollars",
+				"type": "bigint"
+			},
+			{
+				"name": "OscarNominations",
+				"type": "tinyint"
+			},
+			{
+				"name": "OscarWins",
+				"type": "tinyint"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Film"
+		}
+	}
+}
