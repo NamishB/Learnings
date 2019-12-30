@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy_f0a",
+				"name": "CopyFromAzureSQLtoBlob",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -39,11 +39,166 @@
 							"fileExtension": ".txt"
 						}
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "FilmID",
+									"type": "Int32"
+								},
+								"sink": {
+									"type": "Int32",
+									"ordinal": 1
+								}
+							},
+							{
+								"source": {
+									"name": "Title",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 2
+								}
+							},
+							{
+								"source": {
+									"name": "ReleaseDate",
+									"type": "DateTime"
+								},
+								"sink": {
+									"type": "DateTime",
+									"ordinal": 3
+								}
+							},
+							{
+								"source": {
+									"name": "DirectorID",
+									"type": "Int32"
+								},
+								"sink": {
+									"type": "Int32",
+									"ordinal": 4
+								}
+							},
+							{
+								"source": {
+									"name": "StudioID",
+									"type": "Int32"
+								},
+								"sink": {
+									"type": "Int32",
+									"ordinal": 5
+								}
+							},
+							{
+								"source": {
+									"name": "Review",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 6
+								}
+							},
+							{
+								"source": {
+									"name": "CountryID",
+									"type": "Int32"
+								},
+								"sink": {
+									"type": "Int32",
+									"ordinal": 7
+								}
+							},
+							{
+								"source": {
+									"name": "LanguageID",
+									"type": "Int32"
+								},
+								"sink": {
+									"type": "Int32",
+									"ordinal": 8
+								}
+							},
+							{
+								"source": {
+									"name": "GenreID",
+									"type": "Int32"
+								},
+								"sink": {
+									"type": "Int32",
+									"ordinal": 9
+								}
+							},
+							{
+								"source": {
+									"name": "RunTimeMinutes",
+									"type": "Int16"
+								},
+								"sink": {
+									"type": "Int16",
+									"ordinal": 10
+								}
+							},
+							{
+								"source": {
+									"name": "CertificateID",
+									"type": "Int32"
+								},
+								"sink": {
+									"type": "Int32",
+									"ordinal": 11
+								}
+							},
+							{
+								"source": {
+									"name": "BudgetDollars",
+									"type": "Int64"
+								},
+								"sink": {
+									"type": "Int64",
+									"ordinal": 12
+								}
+							},
+							{
+								"source": {
+									"name": "BoxOfficeDollars",
+									"type": "Int64"
+								},
+								"sink": {
+									"type": "Int64",
+									"ordinal": 13
+								}
+							},
+							{
+								"source": {
+									"name": "OscarNominations",
+									"type": "Byte"
+								},
+								"sink": {
+									"type": "Byte",
+									"ordinal": 14
+								}
+							},
+							{
+								"source": {
+									"name": "OscarWins",
+									"type": "Byte"
+								},
+								"sink": {
+									"type": "Byte",
+									"ordinal": 15
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_f0a",
+						"referenceName": "OnCloudDataset",
 						"type": "DatasetReference"
 					}
 				],
